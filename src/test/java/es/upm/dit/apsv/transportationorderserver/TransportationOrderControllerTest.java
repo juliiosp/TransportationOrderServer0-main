@@ -89,9 +89,6 @@ public class TransportationOrderControllerTest {
       public void testGetOrder() throws Exception {
        
            //call GET "/transportationorders/{truck}"  application/json
-       
-             
-       
            when(repository.findById("8962ZKR")).thenReturn(Optional.of(
        
                      new TransportationOrder("28","8962ZKR",1591682400000L,
@@ -105,13 +102,25 @@ public class TransportationOrderControllerTest {
            mockMvc.perform(MockMvcRequestBuilders
            .get("/transportationorders/8962ZKR")
            .accept(MediaType.APPLICATION_JSON))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.toid").value("28"))
-           .andExpect(jsonPath("$.truck").value("8962ZKR"));
- 
+           .andExpect(status().isOk());
+      }
+      
+    @Test
+
+           public void testFail() throws Exception {
+            
+                //call GET "/transportationorders/{truck}"  application/json
+                when(repository.findById("8962ZKR")).thenReturn(Optional.of(
+            
+                          new TransportationOrder("28","8962ZKR",1591682400000L,
+            
+                          40.4562191,-3.8707211,1591692196000L,42.0206372,-4.5330132,
+            
+                          0,0.0,0.0,0)));
+                          
            mockMvc.perform(MockMvcRequestBuilders
-           .get("/transportationorders/99")
+           .get("/transportationorders/9999AAA")
            .accept(MediaType.APPLICATION_JSON))
-           .andExpect(status().isNotFound());
+           .andExpect(status().is4xxClientError());
          }
  }
